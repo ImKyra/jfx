@@ -164,8 +164,8 @@ public class SwingNodeInteropN {
         return new SwingNodeContent(content, node);
     }
 
-    public DisposerRecord createSwingNodeDisposer(Object frame) {
-        LightweightFrameWrapper lwFrame = (LightweightFrameWrapper)frame;
+    public DisposerRecord createSwingNodeDisposer(WeakReference<Object> frame) {
+        WeakReference<LightweightFrameWrapper> lwFrame = new WeakReference<LightweightFrameWrapper>((LightweightFrameWrapper)frame.get());
         return new SwingNodeDisposer(lwFrame);
     }
 
@@ -233,16 +233,16 @@ public class SwingNodeInteropN {
     }
 
     private static class SwingNodeDisposer implements DisposerRecord {
-        LightweightFrameWrapper lwFrame;
+        WeakReference<LightweightFrameWrapper> lwFrame;
 
-        SwingNodeDisposer(LightweightFrameWrapper ref) {
+        SwingNodeDisposer(WeakReference<LightweightFrameWrapper> ref) {
             this.lwFrame = ref;
         }
 
         @Override
         public void dispose() {
-            if (lwFrame != null) {
-                lwFrame.dispose();
+            if (lwFrame.get() != null) {
+                lwFrame.get().dispose();
                 lwFrame = null;
             }
         }

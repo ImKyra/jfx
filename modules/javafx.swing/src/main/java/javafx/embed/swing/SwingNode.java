@@ -387,7 +387,8 @@ public class SwingNode extends Node {
             swNodeIOP.setContent(lwFrame, swNodeIOP.createSwingNodeContent(content, this));
             swNodeIOP.setVisible(lwFrame, true);
 
-            rec = swNodeIOP.createSwingNodeDisposer(lwFrame);
+            WeakReference<Object> lwFramePtr = new WeakReference(lwFrame);
+            rec = swNodeIOP.createSwingNodeDisposer(lwFramePtr);
             disposerRecRef = Disposer.addRecord(this, rec);
 
             if (getScene() != null) {
